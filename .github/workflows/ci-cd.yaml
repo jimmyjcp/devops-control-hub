@@ -20,6 +20,7 @@ jobs:
         run: |
           docker build -t devops-control-hub:latest ./app
 
+
   security-scan:
     name: Security Scan (Trivy)
     runs-on: ubuntu-latest
@@ -29,20 +30,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Trivy
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
-
       - name: Build image for scan
         run: |
           docker build -t devops-control-hub:latest ./app
 
-      - name: Scan Docker image
-        run: |
-          trivy image --severity HIGH,CRITICAL devops-control-hub:latest
+      - name: Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: devops-control-hub:latest
+          severity: HIGH,CRITICAL
+          exit-code: 1
+          format: table
+
 
   deploy:
     name: Deploy Application
@@ -52,4 +51,4 @@ jobs:
     steps:
       - name: Deploy placeholder
         run: |
-          echo "Deploy step will be implemented with Kubernetes"
+          echo "Deploy step will be implemented later with Kubernetes"
