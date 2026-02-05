@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: jimycp1234/devops-control-hub:1.0
+          image: jimyjcp1234/devops-control-hub:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 80
