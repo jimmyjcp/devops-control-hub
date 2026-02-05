@@ -1,22 +1,13 @@
 name: CI/CD Pipeline
 
-# --------------------------------------------------
-# CUÁNDO SE EJECUTA EL PIPELINE
-# --------------------------------------------------
 on:
   push:
     branches:
       - main
   pull_request:
 
-# --------------------------------------------------
-# JOBS DEL PIPELINE
-# --------------------------------------------------
 jobs:
 
-  # ------------------------------------------------
-  # 1. BUILD: CONSTRUIR LA IMAGEN DOCKER
-  # ------------------------------------------------
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
@@ -29,10 +20,6 @@ jobs:
         run: |
           docker build -t devops-control-hub:latest ./app
 
-
-  # ------------------------------------------------
-  # 2. SECURITY SCAN: DEVSECOPS
-  # ------------------------------------------------
   security-scan:
     name: Security Scan (Trivy)
     runs-on: ubuntu-latest
@@ -49,7 +36,7 @@ jobs:
           wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
           sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
 
-      - name: Build image for scanning
+      - name: Build image for scan
         run: |
           docker build -t devops-control-hub:latest ./app
 
@@ -57,10 +44,6 @@ jobs:
         run: |
           trivy image --severity HIGH,CRITICAL devops-control-hub:latest
 
-
-  # ------------------------------------------------
-  # 3. DEPLOY (PLACEHOLDER POR AHORA)
-  # ------------------------------------------------
   deploy:
     name: Deploy Application
     runs-on: ubuntu-latest
@@ -69,4 +52,4 @@ jobs:
     steps:
       - name: Deploy placeholder
         run: |
-          echo "Deploy step will be implemented later with Kubernetes"
+          echo "Deploy step will be implemented with Kubernetes"
